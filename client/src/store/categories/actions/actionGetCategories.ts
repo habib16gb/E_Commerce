@@ -6,9 +6,7 @@ const actionGetCategories = createAsyncThunk(
   async (_, thunkApi) => {
     const { rejectWithValue } = thunkApi;
     try {
-      const response = await axios.get(
-        "https://fakestoreapi.com/products/categories"
-      );
+      const response = await axios.get("http://localhost:3000/api/category");
       return response.data;
     } catch (error) {
       if (error instanceof axios.AxiosError) {

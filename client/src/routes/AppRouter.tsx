@@ -10,6 +10,7 @@ import {
   Login,
   Register,
   Error,
+  Category,
 } from "@pages/index";
 
 const router = createBrowserRouter([
@@ -35,17 +36,30 @@ const router = createBrowserRouter([
         element: <Categories />,
       },
       {
-        path: "products",
-        element: <Products />,
-      },
-      {
-        path: "product/:prefix",
-        element: <Product />,
+        path: "categories/:prefix",
+        element: <Category />,
         loader: ({ params }) => {
           if (
             typeof params.prefix !== "string" ||
             !/^[a-z]+$/i.test(params.prefix)
           ) {
+            throw new Response("Bad Request", {
+              statusText: "Category not found",
+              status: 404,
+            });
+          }
+          return true;
+        },
+      },
+      {
+        path: "products",
+        element: <Products />,
+      },
+      {
+        path: "product/:id",
+        element: <Product />,
+        loader: ({ params }) => {
+          if (typeof params.id !== "string" || !/^[a-z]+$/i.test(params.id)) {
             throw new Response("Bad Request", {
               statusText: "Category not found",
               status: 404,

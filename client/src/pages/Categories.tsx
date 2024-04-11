@@ -1,26 +1,29 @@
 import { Category } from "@components/index";
 import { Col, Container, Row } from "react-bootstrap";
+import { useAppDispatch, useAppSelector } from "@hooks/index";
+import { actionGetCategories } from "@store/categories/categoriesSlice";
+import { useEffect } from "react";
 
 const Categories = () => {
+  const dispatch = useAppDispatch();
+  const { records } = useAppSelector((state) => state.categoriesSlice);
+  useEffect(() => {
+    dispatch(actionGetCategories());
+  }, [dispatch]);
+
+  const categoriesList = () =>
+    records.length > 0 ? (
+      records.map((record) => (
+        <Col key={record.id}>
+          <Category {...record} />
+        </Col>
+      ))
+    ) : (
+      <p>no categories</p>
+    );
   return (
     <Container>
-      <Row>
-        <Col xs={3} className='d-flex justify-content-center mb-5 mt-2'>
-          <Category />
-        </Col>
-        <Col xs={3} className='d-flex justify-content-center mb-5 mt-2'>
-          <Category />
-        </Col>
-        <Col xs={3} className='d-flex justify-content-center mb-5 mt-2'>
-          <Category />
-        </Col>
-        <Col xs={3} className='d-flex justify-content-center mb-5 mt-2'>
-          <Category />
-        </Col>
-        <Col xs={3} className='d-flex justify-content-center mb-5 mt-2'>
-          <Category />
-        </Col>
-      </Row>
+      <Row>{categoriesList()}</Row>
     </Container>
   );
 };
