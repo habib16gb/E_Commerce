@@ -1,19 +1,23 @@
-import { Container } from "react-bootstrap";
 import { Footer, Header } from "@components/commons";
-import styles from "./styles.module.css";
+import Box from "@mui/material/Box";
 import { Outlet } from "react-router-dom";
-
-const { wrapper, container } = styles;
 
 const MainLayout = () => {
   return (
-    <Container className={container}>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
+        height: "100vh",
+      }}
+    >
       <Header />
-      <div className={wrapper}>
+      <div className='flex-1 p-8'>
         <Outlet />
       </div>
       <Footer />
-    </Container>
+    </Box>
   );
 };
 

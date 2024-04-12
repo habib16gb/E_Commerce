@@ -1,6 +1,6 @@
 import { Category } from "@components/index";
-import { Col, Container, Row } from "react-bootstrap";
 import { useAppDispatch, useAppSelector } from "@hooks/index";
+import { Box, Grid } from "@mui/material";
 import { actionGetCategories } from "@store/categories/categoriesSlice";
 import { useEffect } from "react";
 
@@ -11,21 +11,20 @@ const Categories = () => {
     dispatch(actionGetCategories());
   }, [dispatch]);
 
-  const categoriesList = () =>
-    records.length > 0 ? (
-      records.map((record) => (
-        <Col key={record.id}>
-          <Category {...record} />
-        </Col>
-      ))
-    ) : (
-      <p>no categories</p>
-    );
-  return (
-    <Container>
-      <Row>{categoriesList()}</Row>
-    </Container>
+  const categoriesList = () => (
+    <Grid container spacing={8}>
+      {records.length > 0 ? (
+        records.map((record) => (
+          <Grid item xs={12} sm={6} md={4} lg={3} key={record.id}>
+            <Category {...record} />
+          </Grid>
+        ))
+      ) : (
+        <Grid item>no categories</Grid>
+      )}
+    </Grid>
   );
+  return <Box>{categoriesList()}</Box>;
 };
 
 export default Categories;
