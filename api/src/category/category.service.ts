@@ -10,6 +10,7 @@ export class CategoryService {
     const category = await this.prisma.category.create({
       data,
     });
+
     return category;
   }
 

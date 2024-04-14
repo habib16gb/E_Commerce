@@ -4,12 +4,28 @@ import { Prisma } from '@prisma/client';
 
 import { Response } from 'express';
 
-@Catch(Prisma.PrismaClientKnownRequestError)
+@Catch(
+  Prisma.PrismaClientKnownRequestError,
+  Prisma.PrismaClientValidationError,
+  Prisma.PrismaClientInitializationError,
+  Prisma.PrismaClientRustPanicError,
+  Prisma.PrismaClientUnknownRequestError,
+)
 export class PrismaClientExceptionFilter extends BaseExceptionFilter {
   catch(exception: Prisma.PrismaClientKnownRequestError, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
     const stack = exception.message.replace(/\n/g, '');
+
+    if (exception.name === 'PrismaClientValidationError') {
+      console.log('Prisma client validation error');
+      return response.status(HttpStatus.BAD_REQUEST).json({
+        statusCode: HttpStatus.BAD_REQUEST,
+        error: 'invalid request body',
+        timestamp: new Date().toISOString(),
+        message: stack,
+      });
+    }
 
     switch (exception.code) {
       case 'P2002':
@@ -33,6 +49,7 @@ export class PrismaClientExceptionFilter extends BaseExceptionFilter {
           message: 'Internal Server Error',
           code: exception.code,
           meta: exception.meta,
+          name: exception.name,
         });
     }
   }
