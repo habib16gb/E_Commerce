@@ -29,6 +29,8 @@ export class RolesGuard implements CanActivate {
       const payload = await this.jwtService.verifyAsync(token, {
         secret: jwtConstants.accessSecret,
       });
+      if (payload.role === ERole.ADMIN) return true;
+
       return requiredRoles.includes(payload.role);
     } catch (error) {
       return false;

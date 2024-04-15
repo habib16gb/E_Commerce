@@ -40,6 +40,12 @@ export class PrismaClientExceptionFilter extends BaseExceptionFilter {
           timestamp: new Date().toISOString(),
           message: `${exception.meta?.modelName} ${exception.meta?.cause}`,
         });
+      case 'P2003':
+        return response.status(HttpStatus.NOT_FOUND).json({
+          statusCode: HttpStatus.NOT_FOUND,
+          timestamp: new Date().toISOString(),
+          message: `${exception.meta?.field_name} dont exist try another one or created`,
+        });
 
       default:
         return response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
